@@ -1,0 +1,30 @@
+name: Build AlTayeb APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unzip project
+        run: |
+          unzip -o AlTayeb_Android_Starter.zip
+          ls -la
+          ls -la al_tayeb_android
+
+      - name: Build APK
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 8.10.2
+          arguments: -p al_tayeb_android assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlTayeb-APK
+          path: al_tayeb_android/app/build/outputs/apk/debug/app-debug.apk
